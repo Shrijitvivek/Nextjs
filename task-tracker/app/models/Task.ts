@@ -3,7 +3,10 @@ import mongoose, { Schema, model, models } from "mongoose";
 const TaskSchema = new Schema({
   title: { type: String, required: true },
   description: String,
-  completed: { type: Boolean, default: false }
+  status :{type:String,
+    enum :['Pending' , 'Completed' , 'In-Progress'],
+    default : 'Pending'
+  }
   
 },
 {timestamps:true});

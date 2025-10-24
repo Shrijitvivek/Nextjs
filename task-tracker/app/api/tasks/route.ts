@@ -11,7 +11,11 @@ export async function GET() {
 export async function POST(req: Request) {
   await dbcon();
   const data = await req.json();
-  const newTask = await Task.create(data);
+  const newTask = await Task.create({
+    title : data.title,
+    description : data.description,
+    status : data.status || 'Pending'
+  });
   return NextResponse.json(newTask, { status: 201 });
 }
 
