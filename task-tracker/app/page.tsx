@@ -1,15 +1,23 @@
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"; 
+export const revalidate = 0; 
 
 import TaskCard from "./components/TaskCard";
 
 export default async function Homepage() {
   try {
-   const resAll = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/tasks`, { cache: "no-store" });
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL ||
+      "http://tasktracker2.vercel.app";
+
+    const resAll = await fetch(`${baseUrl}/api/tasks`, {
+      cache: "no-store",
+    });
     const tasks = resAll.ok ? await resAll.json() : [];
 
-   
     const taskId = "64f123abc456def7890";
-    const resSingle = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/tasks/${taskId}`, { cache: "no-store" });
+    const resSingle = await fetch(`${baseUrl}/api/tasks/${taskId}`, {
+      cache: "no-store",
+    });
     const singleTask = resSingle.ok ? await resSingle.json() : null;
 
     return (
