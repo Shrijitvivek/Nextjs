@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import TaskCard from "./components/TaskCard";
 
 export default async function Homepage() {
