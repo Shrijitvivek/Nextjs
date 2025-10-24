@@ -14,3 +14,38 @@ export async function POST(req: Request) {
   const newTask = await Task.create(data);
   return NextResponse.json(newTask, { status: 201 });
 }
+
+export async function PUT(req: Request) {
+  await dbcon();
+  const { id, ...updatedData } = await req.json();
+
+  if (!id) {
+    return NextResponse.json({ error: "Task ID is required" }, { status: 400 });
+  }
+
+  const updatedTask = await Task.findByIdAndUpdate(id, updatedData, { new: true });
+
+  if (!updatedTask) {
+    return NextResponse.json({ error: "Task not found" }, { status: 404 });
+  }
+
+  return NextResponse.json(updatedTask, { status: 200 });
+}
+
+
+export async function DELETE(req: Request) {
+  await dbcon();
+  const { id } = await req.json();
+
+  if (!id) {
+    return NextResponse.json({ error: "Task ID is required" }, { status: 400 });
+  }
+
+  const deletedTask = await Task.findByIdAndDelete(id);
+
+  if (!deletedTask) {
+    return NextResponse.json({ error: "Task not found" }, { status: 404 });
+  }
+
+  return NextResponse.json({ message: "Task deleted successfully" }, { status: 200 });
+}

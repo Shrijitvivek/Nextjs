@@ -29,7 +29,7 @@ export default function TaskForm() {
       />
 
       <textarea
-      className="border p-2 w-full"
+      className="my-5 border p-2 w-full"
       placeholder="Description"
       value={description}
       onChange={(e)=> SetDescription(e.target.value)}/>
