@@ -1,22 +1,14 @@
-
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-
 import TaskCard from "./components/TaskCard";
-import dbcon from "@/app/lib/mongodb";
-import Task from "@/app/models/Task";
 
 export default async function Homepage() {
   try {
-   
-    await dbcon();
+   const resAll = await fetch("/api/tasks", { cache: "no-store" });
+    const tasks = resAll.ok ? await resAll.json() : [];
 
    
-    const tasks = await Task.find().sort({ createdAt: -1 }).lean();
-
-    
     const taskId = "64f123abc456def7890";
-    const singleTask = await Task.findById(taskId).lean();
+    const resSingle = await fetch(`/api/tasks/${taskId}`, { cache: "no-store" });
+    const singleTask = resSingle.ok ? await resSingle.json() : null;
 
     return (
       <div className="p-4">
