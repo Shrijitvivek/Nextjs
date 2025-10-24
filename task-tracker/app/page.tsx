@@ -1,39 +1,55 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import TaskCard from "./components/TaskCard";
 
-export default async function Homepage() {
-  try {
-   const resAll = await fetch("/api/tasks", { cache: "no-store" });
-    const tasks = resAll.ok ? await resAll.json() : [];
+interface Task {
+  _id: string;
+  title: string;
+  description: string;
+  status: string;
+}
 
-   
-    const taskId = "64f123abc456def7890";
-    const resSingle = await fetch(`/api/tasks/${taskId}`, { cache: "no-store" });
-    const singleTask = resSingle.ok ? await resSingle.json() : null;
+export default function Homepage() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [error, setError] = useState<string>("");
 
+  const fetchTasks = async () => {
+    try {
+      const res = await fetch("/api/tasks");
+      if (!res.ok) throw new Error("Failed to fetch tasks");
+      const data = await res.json();
+      setTasks(data);
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+      setError("Failed to load tasks.");
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  if (error)
     return (
-      <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">All Tasks</h1>
-
-        {tasks.length ? (
-          <div className="space-y-3 mb-6">
-            {tasks.map((task: any, index: number) => (
-              <TaskCard key={task._id} task={task} index={index} />
-            ))}
-          </div>
-        ) : (
-          <p>No Tasks Found. Add One!</p>
-        )}
-
-        {singleTask && (
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-2">Single Task</h2>
-            <TaskCard task={singleTask} index={0} />
-          </div>
-        )}
+      <div className="p-4 text-center text-red-600 font-medium">
+        {error}
       </div>
     );
-  } catch (error) {
-    console.error("Error fetching tasks:", error);
-    return <p className="p-4 text-red-500">Failed to load tasks.</p>;
-  }
+
+  return (
+    <div className="p-4 min-h-screen bg-gray-50">
+      <h1 className="text-2xl font-bold mb-4 text-center">All Tasks</h1>
+
+      {tasks.length ? (
+        <div className="space-y-3 mb-6">
+          {tasks.map((task, index) => (
+            <TaskCard key={task._id} task={task} index={index} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-gray-600 text-center">No Tasks Found. Add One!</p>
+      )}
+    </div>
+  );
 }
