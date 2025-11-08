@@ -19,7 +19,7 @@ export async function POST(req: Request) { //create tasks
   return NextResponse.json(newTask, { status: 201 });
 }
 
-export async function PUT(req: Request) {
+export async function PUT(req: Request) { // update tasks
   await dbcon();
   const { id, ...updatedData } = await req.json();
 
@@ -37,7 +37,7 @@ export async function PUT(req: Request) {
 }
 
 
-export async function DELETE(req: Request) {
+export async function DELETE(req: Request) { // delete tasks
   await dbcon();
   const { id } = await req.json();
 
