@@ -1,0 +1,1 @@
+Basic tasks of nextjs
